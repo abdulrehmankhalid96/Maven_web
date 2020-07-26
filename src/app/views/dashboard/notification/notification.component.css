@@ -1,0 +1,37 @@
+.uper{
+  width: 16%;
+  float: left;
+}
+.uper2{
+  width:50%;
+  float: left;
+}
+@media screen and (max-width: 524px) {
+.uper2{
+  width:50%;
+}
+.uper{
+  width:48%;
+}
+
+}
+@media screen and (min-width: 524px){
+  .Inner_one{
+
+    width: 100% !important;
+ }
+ .Inner_two{
+
+   width: 100% !important;
+ }
+}
+.Inner_one{
+  float: left;
+   width: 45%;
+}
+.Inner_two{
+  float: right;
+  width: 45%;
+}
+
+

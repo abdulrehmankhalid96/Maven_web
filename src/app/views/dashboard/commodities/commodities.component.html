@@ -1,0 +1,274 @@
+<div class="container-fluid">
+  <div class='row'>
+    <div class="col-md-3 ">
+      <button type="button" class="btn btn-primary" (click)='toggleCard()'>Add Commodities</button>
+    </div>
+  </div>
+
+  <div class='row mt-2' *ngIf='isAuth' >
+    <div class="col-sm-12 col-md-6">
+      <div class="card">
+        <div class="card-header">
+        Add Commodity
+        </div>
+        <div class="card-body">
+          <form [formGroup]='commodities_Form'>
+          <input class='form-control uper2'  placeholder="Commodity Name" formControlName='comm_name'
+          [ngClass]="{ 'is-invalid': submitted && f.comm_name.errors }"
+          >
+          
+          <div >
+            <i class="fa fa-file-image-o fa-2x " style='padding: 3px 3px 3px 15px' aria-hidden="true" (click)='iconpicker.click()'></i>
+            <!-- <i class="fa fa-picture-o" aria-hidden="true" (click)='iconpicker.click()'></i> -->
+            <!-- <button style='float:revert' class='iconbtn' (click)='iconpicker.click()'>Upload Icon</button> -->
+            <input type='file' (change)='fileCaptuer($event)' hidden #iconpicker>
+           <span>{{SelectedFileName}}</span>
+
+           </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <div class='row'  style='float:right'>
+          <div style='padding: 0px 10px'>
+            <button  type="button" class="btn btn-sm btn-success" (click)='add_commodity()'>Submit</button>
+          </div>
+
+
+            <div>
+              <button type="button" class="btn btn-sm btn-danger" (click)='toggleCard()'>cancel</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class='row mt-2'>
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-align-justify"></i> Commodities 
+      </div>
+      <div class="card-body  table-responsive">
+        
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+
+            <tr>
+              <th>#Sr</th>
+              <th>Title</th>
+              <th>Advoice</th>
+              <th>Action</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor='let a of List_of_All_commodities; let i=index'>
+              <td>{{i+1}}</td>
+              <td><img style='border-radius: 30px;
+                height: 45px;
+                width: 45px;' src="{{Images_base_Url+a.comm_attachment}}" />
+                  <h6 style='padding:5px'>{{a.comm_title}}</h6>
+              </td>
+              <td>
+                <div class="row"  *ngIf='a.recent_adv'>
+                  <div class="col-md-1"></div>
+                  <div class="col-md-5 col-sm-8">
+                    <img  src='{{Images_base_Url+a.recent_adv.adv_attachment}}'  style='height: 140px;
+                    width: 100%' />
+                  </div>
+                  <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h6>Buy If: {{a.recent_adv.by_if}}</h6>
+                        </div>
+                        <div class="col-md-6">
+                          <h6>Sell If: {{a.recent_adv.sell_if}}</h6>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h6>Take Profit If:  {{a.recent_adv.take_profit_if}}</h6>
+                        </div>
+                        <div class="col-md-6">
+                        <h6>Cut Loss If: {{a.recent_adv.cut_loss_if}}</h6>  
+                        </div>
+                      
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <h6>Remark: {{a.recent_adv.adv_comments}} </h6>
+                        </div>
+                    
+                      
+                      </div>
+                  </div>
+                 
+       
+                </div>
+                
+       
+              </td>
+              <td style='cursor: pointer;' >
+                <div class="row" style="text-align: center;">
+                  
+                  <div class="col-md-12">
+                    <button class="btn btn-success btn-sm" (click)='openModal(a)'>Add Advice</button>
+                  </div>
+                </div>
+
+                <div class="row mt-3" style="text-align: center;">
+               
+                  <div class="col-md-12">
+                    <button class="btn btn-success btn-sm" (click)='openModalHistory(a.comm_adv)'>View History</button>
+                  </div>
+                </div>
+               
+                <!-- <span class="badge badge-success" ></span>
+                <span class="badge badge-success" (click)='openModalHistory()' >View History</span> -->
+              </td>
+            </tr>
+
+
+          </tbody>
+        </table>
+   
+
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<modal #myModal>
+  <modal-header>
+      Add Advice
+  </modal-header>
+
+  <modal-content>
+    <form [formGroup]='Advoice_form'>
+<div class='row'>
+  <div class='col-md-6'>
+    <label>
+      Buy it:
+      <input class='form-control' formControlName='buy_if' placeholder='Buy it' 
+      [ngClass]="{ 'is-invalid': submitted && g.buy_if.errors }">
+      <div *ngIf="submitted && g.buy_if.errors" class="invalid-feedback">
+        <div *ngIf="g.buy_if.errors.required">Buy if is required</div>
+    </div>
+    </label>
+  </div>
+  <div class='col-md-6'>
+    <label>
+      Sell it:
+      <input class='form-control' formControlName='Sell_if' placeholder='Sell it'
+      [ngClass]="{ 'is-invalid': submitted && g.Sell_if.errors }">
+      <div *ngIf="submitted && g.Sell_if.errors" class="invalid-feedback">
+        <div *ngIf="g.Sell_if.errors.required">Sell if is required</div>
+    </div>
+    </label>
+  </div>
+
+  
+</div>
+<div class='row'>
+
+
+  <div class='col-md-6'>
+    <label>
+      Take Profit If:
+      <input class='form-control' formControlName='take_profit' placeholder='Take Profit If'
+      [ngClass]="{ 'is-invalid': submitted && g.take_profit.errors }">
+      <div *ngIf="submitted && g.take_profit.errors" class="invalid-feedback">
+        <div *ngIf="g.take_profit.errors.required">Sell if is required</div>
+    </div>
+    </label>
+  </div>
+
+  <div class='col-md-6'>
+    <label>
+      Cut Loss If:
+      <input class='form-control' formControlName='cut_loss' placeholder='Cut Loss If'
+      [ngClass]="{ 'is-invalid': submitted && g.cut_loss.errors }" >
+      <div *ngIf="submitted && g.cut_loss.errors" class="invalid-feedback">
+        <div *ngIf="g.cut_loss.errors.required">Cut loss is required</div>
+    </div>
+    </label>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-md-8'>
+    <textarea class='form-control' formControlName='advoice_comm' placeholder='Add Notes'
+    [ngClass]="{ 'is-invalid': submitted && g.advoice_comm.errors }"
+    ></textarea>
+    <div *ngIf="submitted && g.advoice_comm.errors" class="invalid-feedback">
+      <div *ngIf="g.advoice_comm.errors.required">Advice is required</div>
+  </div>
+  </div>
+  <div class='col-md-2'>
+    <input type='file' #filepicker (change)='fileCaptuer_2($event)' hidden>
+    <i style='padding: 13px 2px 2px 2px; cursor: pointer;'
+     class="fa fa-paperclip fa-2x" aria-hidden="true" (click)='filepicker.click()'></i>
+     {{Advice_image_name}}
+  </div>
+</div>
+</form>
+  </modal-content>
+
+  <modal-footer>
+    <button class='btn btn-success btn-sm' (click)='add_advice()'>Submit</button>
+     <button class='btn btn-danger btn-sm' (click)='closeModal()'>Cancel</button>
+  </modal-footer>
+</modal>
+
+
+<modal #history>
+<modal-header>
+  History
+</modal-header>
+<modal-content>
+  <div class="card-body">
+    <div class=table-responsive>
+    <table class="table table-bordered table-striped table-sm">
+      <thead>
+
+        <tr>
+          <th>#Sr</th>
+          <th>Buy If</th>
+          <th>Sell If</th>
+          <th>Take Profit</th>
+          <th>Cut Loss</th>
+          <th>Comments</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor='let a of AdviceHistory;let i=index'>
+         <td>{{i+1}}</td>
+         <td>{{a.by_if}}</td>
+         <td>{{a.sell_if}}</td>
+         <td>{{a.take_profit_if}}</td>
+         <td>{{a.cut_loss_if}}</td>
+         <td>{{a.adv_comments}}</td>
+        </tr>
+
+       
+
+      </tbody>
+    </table>
+  </div>
+
+
+  </div>
+
+</modal-content>
+<modal-footer>
+  <button class='btn btn-danger btn-sm' (click)='closeModal()'>Cancel</button>
+</modal-footer>
+</modal>
+<notifier-container></notifier-container>
