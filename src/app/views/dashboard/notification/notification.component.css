@@ -15,6 +15,23 @@
 }
 
 }
+
+.Th_1{
+  width: 10%;
+}
+.Th_2{
+  width: 10%;
+}
+.Th_3{
+  width: 60%;
+}
+.Th_4{
+  width: 10%;
+}
+.Th_5{
+  width: 10%;
+}
+
 @media screen and (min-width: 524px){
   .Inner_one{
 
@@ -33,5 +50,60 @@
   float: right;
   width: 45%;
 }
-
-
+.fileError{
+  color:red;
+}
+.Th_1{
+  width: 10%;
+}
+.Th_2{
+  width: 10%;
+}
+.Th_3{
+  width: 10%;
+ 
+}
+.Th_4{
+  width: 10%;
+}
+.Th_5{
+  width: 10%;
+}
+@media screen and (max-width: 480px) {
+  .Th_1{
+    width: 20% ;
+   
+    column-count: 2;
+  }
+  .Th_2{
+    width: 20%;
+    column-count: 2;
+  }
+  .Th_3{
+    width: 140%;
+    column-count: 5;
+  }
+  .Th_4{
+    width: 20%;
+    column-count: 2;
+  } 
+  .Th_5{
+    width: 20%;
+    column-count: 2;
+  } 
+  .AdivceImg{
+    width: 70% !important; 
+  }
+  .searchfield{
+    float: right !important; 
+    width: 100% !important;
+  }
+}
+.AdivceImg{
+ 
+  width: 100%;
+}
+.searchfield{
+  float: right; 
+  width: 20%
+}

@@ -6,6 +6,8 @@ import { CommoditiesComponent } from './commodities/commodities.component';
 import { ChatComponent } from './chat/chat.component';
 import { NotificationComponent } from './notification/notification.component';
 import { UsersComponent } from './users/users.component';
+import { PersonalAdviceComponent } from './personal-advice/personal-advice.component';
+import { PublishNotifactionComponent } from './publish-notifaction/publish-notifaction.component';
 
 const routes: Routes = [
   {
@@ -26,11 +28,9 @@ const routes: Routes = [
     component:UsersComponent
  },
   {
-    path: 'Commoditise',
+    path: 'commodities',
     component:CommoditiesComponent,
-    data: {
-      title: 'Commoditise'
-    }
+    
   },
   {
     path: 'Chat',
@@ -38,6 +38,16 @@ const routes: Routes = [
     data: {
       title: 'Chat'
     }
+  },
+  {
+    path: 'PersonalAdvice',
+    component:PersonalAdviceComponent,
+   
+  },
+  {
+    path: 'publishnotification',
+    component:PublishNotifactionComponent,
+   
   },
 ];
 

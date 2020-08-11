@@ -33,5 +33,54 @@
   float: right;
   width: 45%;
 }
+.Error{
+color: red;
+}
+.Th_1{
+  width: 10%;
+}
+.Th_2{
+  width: 10%;
+}
+.Th_3{
+  width: 70%;
+}
+.Th_4{
+  width: 10%;
+}
 
+@media screen and (max-width: 480px) {
+  .Th_1{
+    width: 20% ;
+   
+    column-count: 2;
+  }
+  .Th_2{
+    width: 20%;
+    column-count: 2;
+  }
+  .Th_3{
+    width: 140%;
+    column-count: 10;
+  }
+  .Th_4{
+    width: 20%;
+    column-count: 2;
+  } 
+  .AdivceImg{
+    width: 100% !important; 
+  }
+  .searchfield{
+    float: right !important; 
+    width: 100% !important;
+  }
+}
+.AdivceImg{
+ 
+  width: 100%;
 
+}
+.searchfield{
+  float: right; 
+  width: 20%;
+}

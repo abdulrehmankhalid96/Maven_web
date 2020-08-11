@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +21,36 @@ export class AppserviceService {
     return this.http.post<any[]>(this.BaseUrl+'/Admin/GetAllCommodities',obj);
      }
      Add_Advoice=(obj):Observable<any[]>=>{
-       return this.http.post<any[]>(this.BaseUrl+'Admin/CreateNewAdvoices',obj);
+       return this.http.post<any[]>(this.BaseUrl+'Admin/CreateNewAdvice',obj);
      }
+     public Commodity_status=(obj):Observable< any[]>=>{
+         return this.http.post<any[]>(this.BaseUrl+'Admin/UpdateCommStatus',obj);
+    }
+
+    public CreateNewNotification=(obj):Observable<any[]>=>{
+      return this.http.post<any[]>(this.BaseUrl+'Admin/CreateNewNotification',obj);
+    }
+  public GetAllNotification=(obj):Observable<any[]>=>{
+    return this.http.post<any[]>(this.BaseUrl+'/Admin/GetAllNotificationsWeb',obj)
+  }
+
+public getAllAppUser=(obj):Observable<any[]>=>{
+  return this.http.post<any[]>(this.BaseUrl+'Admin/GetAllAppUsers',obj);
+}
+// Admin/GetConversationByUser
+public GetConversationByUser=(obj):Observable<any[]>=>{
+  return this.http.post<any[]>(this.BaseUrl+'Admin/GetConversationByUser',obj);
+}
+// Admin/SendResponseAdvRequest
+public SendResponseAdvRequest=(obj):Observable<any[]>=>{
+  return this.http.post<any[]>(this.BaseUrl+"Admin/SendResponseAdvRequest",obj);
+}
+public UpdateAppUserStatus=(obj):Observable<any[]>=>{
+  return this.http.post<any[]>(this.BaseUrl+'Admin/UpdateAppUserStatus',obj);
+}
+
+public   token_varifying() {
+  return !!localStorage.getItem("auth_token");
+}
+
 }

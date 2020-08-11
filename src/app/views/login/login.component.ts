@@ -38,11 +38,14 @@ public  notifier: NotifierService;
     if(res.status==true){
       localStorage.setItem('user_id',res.data.admin_id);
       localStorage.setItem('auth_token', res.data.auth_token)
-      this.router.navigate(['/dashboard/Commoditise'])
+      this.router.navigate(['/dashboard/commodities'])
     }
     else{
   this.notifier.notify("error","Worng Email Password Try Again")
     }
+  },error=>{
+    console.log(error);
+    this.notifier.notify("error","Some thing went wrong")
   })
 
   }

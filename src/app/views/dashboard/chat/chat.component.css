@@ -51,6 +51,11 @@
   display: inline-block;
   width: 6%;
 }
+.img_2{
+  
+  float: right;
+  width: 6%;
+}
 
 
 
@@ -213,8 +218,40 @@ img{ max-width:100%;}
   min-width: 50px;
   text-align: center;
 }
+.icon1 {
+  padding: 16px;
+  background: rebeccapurple;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
 .input-field {
   width: 100%;
   padding: 10px ;
   outline: aqua;
+}
+.fileIcon{
+  width:17%;
+}
+@media screen and (max-width: 480px) {
+  .fileIcon{
+    width:37%;
+  } 
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

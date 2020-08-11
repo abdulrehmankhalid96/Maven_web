@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 mt-2">
+      <button style="float: right;" type="button" class="btn btn-outline-info" 
+      (click)='GotoNofi()'>Public Message</button>
+    </div>
+  </div>
+</div>
+
+<div class='row mt-2'>
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>App Users 
+          <input  class="form-control searchfield" placeholder="Search" type="text" [(ngModel)]="notiy">
+        </div>
+        <div class="card-body">
+          <div class=table-responsive>
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+  
+              <tr>
+                <th>Sr#</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Action</th>
+  
+  
+              </tr>
+            </thead>
+            <tbody>
+  
+  <tr *ngFor='let data of AllUsers| filter:notiy | paginate: { itemsPerPage: 5, currentPage: p } ;let i=index '>
+  <td>{{i+1}}</td>
+  <td>{{data.full_name}}</td>
+  <td>{{data.phone}}</td>
+  <td>{{data.email}}</td>
+  <td><button class="btn btn-outline-info btn-sm" (click)='goChat(data)' >Personal Advice</button></td>
+  
+  
+  </tr>
+  
+            </tbody>
+          </table>
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+  
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  

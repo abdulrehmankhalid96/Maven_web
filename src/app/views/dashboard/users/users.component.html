@@ -2,7 +2,8 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header">
-        <i class="fa fa-align-justify"></i> Users Table
+        <i class="fa fa-align-justify"></i>App Users 
+        <input  class="form-control searchfield" placeholder="Search" type="text" [(ngModel)]="notiy">
       </div>
       <div class="card-body">
         <div class=table-responsive>
@@ -11,24 +12,42 @@
 
             <tr>
               <th>Sr#</th>
-              <th>Email</th>
+              <th>Name</th>
               <th>Phone</th>
+              <th>Email</th>
+              <th>Action</th>
 
 
             </tr>
           </thead>
           <tbody>
 
-<tr>
-<td>1</td>
-<td>AbdulrehmanKhalid59@gmail.com</td>
-<td>03154666755</td>
+<tr *ngFor='let data of AllUsers| filter:notiy | paginate: { itemsPerPage: 5, currentPage: p } ;let i=index '>
+<td>{{i+1}}</td>
+<td>{{data.full_name}}</td>
+<td>{{data.phone}}</td>
+<td>{{data.email}}</td>
+<td>
+  <div class="col-md-12 btn-group mt-2" dropdown>
+    <button style="text-align: center;" dropdownToggle type="button" class="btn btn-outline-info  btn-sm">
+      {{data.status}} <span class="caret"></span>
+    </button>
+    <ul *dropdownMenu class="dropdown-menu" role="menu">
+      <li role="menuitem"  *ngIf='data.status=="UNBLOCKED"' (click)="updateStatus(data.status,data.app_user_id)"><a class="dropdown-item"  
+         >Blocked</a></li>
+      <li role="menuitem" *ngIf='data.status=="BLOCKED"'(click)="updateStatus(data.status,data.app_user_id)"><a class="dropdown-item"   
+         >Unblocked </a></li>
+     
+    </ul>
+  </div>
+</td>
 
 
 </tr>
 
           </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
       </div>
 
 

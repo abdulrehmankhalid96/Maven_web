@@ -1,9 +1,15 @@
+
+ 
 <div class="container-fluid">
-  <div class='row'>
-    <div class="col-md-3 ">
-      <button type="button" class="btn btn-primary" (click)='toggleCard()'>Add Commodities</button>
-    </div>
+  <div class="row">
+    <div  style="    width: 100%;height: 14vh;    padding-top: 10px;">
+
+      <!-- <button type="button" class="btn btn-primary" style="float: left;">Add Commodities</button> -->
+      <button type="button" class="btn btn-primary" style="float: right;" (click)='toggleCard()'><i class="fa fa-plus"></i></button>
+   
   </div>
+  </div>
+ 
 
   <div class='row mt-2' *ngIf='isAuth' >
     <div class="col-sm-12 col-md-6">
@@ -13,7 +19,7 @@
         </div>
         <div class="card-body">
           <form [formGroup]='commodities_Form'>
-          <input class='form-control uper2'  placeholder="Commodity Name" formControlName='comm_name'
+          <input class='form-control uper2'  placeholder="Title" formControlName='comm_name'
           [ngClass]="{ 'is-invalid': submitted && f.comm_name.errors }"
           >
           
@@ -22,7 +28,7 @@
             <!-- <i class="fa fa-picture-o" aria-hidden="true" (click)='iconpicker.click()'></i> -->
             <!-- <button style='float:revert' class='iconbtn' (click)='iconpicker.click()'>Upload Icon</button> -->
             <input type='file' (change)='fileCaptuer($event)' hidden #iconpicker>
-           <span>{{SelectedFileName}}</span>
+           <span [class.Error]='errorColor' >{{SelectedFileName}}</span>
 
            </div>
           </form>
@@ -49,23 +55,24 @@
     <div class="card">
       <div class="card-header">
         <i class="fa fa-align-justify"></i> Commodities 
+        <input   class="form-control searchfield" placeholder="Search" type="text" [(ngModel)]="term">
       </div>
-      <div class="card-body  table-responsive">
+      <div class="card-body  " style="overflow-y: scroll;">
         
-        <table class="table table-bordered table-striped table-sm">
+        <table class="table table-bordered table-striped ">
           <thead>
 
             <tr>
-              <th>#Sr</th>
-              <th>Title</th>
-              <th>Advoice</th>
-              <th>Action</th>
+              <th class="Th_1" >Sr#</th>
+              <th class="Th_2" >Title</th>
+              <th class="Th_3" >Advice</th>
+              <th class="Th_4" >Action</th>
 
             </tr>
           </thead>
           <tbody>
 
-            <tr *ngFor='let a of List_of_All_commodities; let i=index'>
+            <tr *ngFor='let a of List_of_All_commodities | filter:term | paginate: { itemsPerPage: 5, currentPage: p }; let i=index ;'>
               <td>{{i+1}}</td>
               <td><img style='border-radius: 30px;
                 height: 45px;
@@ -73,39 +80,49 @@
                   <h6 style='padding:5px'>{{a.comm_title}}</h6>
               </td>
               <td>
-                <div class="row"  *ngIf='a.recent_adv'>
-                  <div class="col-md-1"></div>
-                  <div class="col-md-5 col-sm-8">
-                    <img  src='{{Images_base_Url+a.recent_adv.adv_attachment}}'  style='height: 140px;
-                    width: 100%' />
+                <div   *ngIf='a.recent_adv'>
+                  
+                <div style="    padding: 7px;
+                width: 50%;
+                float: left;">
+                  <img  src='{{Images_base_Url+a.recent_adv.adv_attachment}}' class="AdivceImg"  />
+                </div>
+                  
+                 
+               <div style="    padding: 7px;
+               width: 50%;
+               float: right ;">
+                <div style="width: 100%;">
+                  <div style="width: 50%;float: left;">
+                    <h6><span style="font-weight: bold;">Buy If:</span> {{a.recent_adv.by_if}}</h6>
                   </div>
-                  <div class="col-md-6">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <h6>Buy If: {{a.recent_adv.by_if}}</h6>
-                        </div>
-                        <div class="col-md-6">
-                          <h6>Sell If: {{a.recent_adv.sell_if}}</h6>
-                        </div>
-                      </div>
+                  <div style="width: 50%;float: right;">
+                    <h6><span style="font-weight: bold;">Sell If:</span> {{a.recent_adv.sell_if}}</h6>
+                  </div>
+                </div>
 
-                      <div class="row">
-                        <div class="col-md-6">
-                          <h6>Take Profit If:  {{a.recent_adv.take_profit_if}}</h6>
-                        </div>
-                        <div class="col-md-6">
-                        <h6>Cut Loss If: {{a.recent_adv.cut_loss_if}}</h6>  
-                        </div>
-                      
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <h6>Remark: {{a.recent_adv.adv_comments}} </h6>
-                        </div>
-                    
-                      
-                      </div>
+                <div style="width: 100%;">
+                  <div style="width: 50%;float: left;">
+                    <h6><span style="font-weight: bold;">Take Profit If:</span>  {{a.recent_adv.take_profit_if}}</h6>
                   </div>
+                  <div style="width: 50%;float: right;">
+                  <h6><span style="font-weight: bold;">Cut Loss If:</span> {{a.recent_adv.cut_loss_if}}</h6>  
+                  </div>
+                
+                </div>
+                <div >
+                  <div style="width: 100%;">
+                    <h6><span style="font-weight: bold;">Instructions:</span> </h6>
+                  </div>
+                  <div style="width: 100%;">
+                    <h6>{{a.recent_adv.adv_comments}} </h6>
+                  </div>
+              
+                
+                </div>
+               </div>
+                     
+                
                  
        
                 </div>
@@ -116,26 +133,41 @@
                 <div class="row" style="text-align: center;">
                   
                   <div class="col-md-12">
-                    <button class="btn btn-success btn-sm" (click)='openModal(a)'>Add Advice</button>
+                    <button class="btn btn-outline-info btn-sm" (click)='openModal(a)'>Add Advice</button>
                   </div>
                 </div>
 
                 <div class="row mt-3" style="text-align: center;">
                
                   <div class="col-md-12">
-                    <button class="btn btn-success btn-sm" (click)='openModalHistory(a.comm_adv)'>View History</button>
+                    <button class="btn btn-outline-info btn-sm" (click)='openModalHistory(a.comm_adv)'>View History</button>
                   </div>
                 </div>
                
+                <div class="col-md-12 btn-group mt-2" dropdown>
+                  <button style="text-align: center;" dropdownToggle type="button" class="btn btn-outline-info  btn-sm">
+                    {{a.status}} <span class="caret"></span>
+                  </button>
+                  <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <li role="menuitem"><a class="dropdown-item"  *ngIf='a.status=="Enabled"' 
+                      (click)='Changing_status_of_commodity(a.status,a)'>Disabled</a></li>
+                    <li role="menuitem"><a class="dropdown-item"  *ngIf='a.status=="Disabled"' 
+                      (click)='Changing_status_of_commodity(a.status,a)' >Enabled </a></li>
+                   
+                  </ul>
+                </div>
+
+
                 <!-- <span class="badge badge-success" ></span>
                 <span class="badge badge-success" (click)='openModalHistory()' >View History</span> -->
               </td>
             </tr>
 
-
+           
           </tbody>
+          
         </table>
-   
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
 
 
       </div>
@@ -155,8 +187,8 @@
 <div class='row'>
   <div class='col-md-6'>
     <label>
-      Buy it:
-      <input class='form-control' formControlName='buy_if' placeholder='Buy it' 
+      Buy if:
+      <input class='form-control' formControlName='buy_if' 
       [ngClass]="{ 'is-invalid': submitted && g.buy_if.errors }">
       <div *ngIf="submitted && g.buy_if.errors" class="invalid-feedback">
         <div *ngIf="g.buy_if.errors.required">Buy if is required</div>
@@ -165,8 +197,8 @@
   </div>
   <div class='col-md-6'>
     <label>
-      Sell it:
-      <input class='form-control' formControlName='Sell_if' placeholder='Sell it'
+      Sell if:
+      <input class='form-control' formControlName='Sell_if' 
       [ngClass]="{ 'is-invalid': submitted && g.Sell_if.errors }">
       <div *ngIf="submitted && g.Sell_if.errors" class="invalid-feedback">
         <div *ngIf="g.Sell_if.errors.required">Sell if is required</div>
@@ -182,7 +214,7 @@
   <div class='col-md-6'>
     <label>
       Take Profit If:
-      <input class='form-control' formControlName='take_profit' placeholder='Take Profit If'
+      <input class='form-control' formControlName='take_profit' 
       [ngClass]="{ 'is-invalid': submitted && g.take_profit.errors }">
       <div *ngIf="submitted && g.take_profit.errors" class="invalid-feedback">
         <div *ngIf="g.take_profit.errors.required">Sell if is required</div>
@@ -193,7 +225,7 @@
   <div class='col-md-6'>
     <label>
       Cut Loss If:
-      <input class='form-control' formControlName='cut_loss' placeholder='Cut Loss If'
+      <input class='form-control' formControlName='cut_loss' 
       [ngClass]="{ 'is-invalid': submitted && g.cut_loss.errors }" >
       <div *ngIf="submitted && g.cut_loss.errors" class="invalid-feedback">
         <div *ngIf="g.cut_loss.errors.required">Cut loss is required</div>
@@ -203,18 +235,25 @@
 </div>
 <div class='row'>
   <div class='col-md-8'>
-    <textarea class='form-control' formControlName='advoice_comm' placeholder='Add Notes'
+    <label>Instructions:</label>
+    <textarea class='form-control' formControlName='advoice_comm' 
     [ngClass]="{ 'is-invalid': submitted && g.advoice_comm.errors }"
     ></textarea>
     <div *ngIf="submitted && g.advoice_comm.errors" class="invalid-feedback">
       <div *ngIf="g.advoice_comm.errors.required">Advice is required</div>
   </div>
   </div>
-  <div class='col-md-2'>
+ 
+</div>
+<div class="row">
+  <div class='col-md-4'>
+    <label>Attachment:
+  
+    </label>
     <input type='file' #filepicker (change)='fileCaptuer_2($event)' hidden>
     <i style='padding: 13px 2px 2px 2px; cursor: pointer;'
      class="fa fa-paperclip fa-2x" aria-hidden="true" (click)='filepicker.click()'></i>
-     {{Advice_image_name}}
+   <span [class.Error]='AdviceImgError'>{{Advice_image_name}}</span>  
   </div>
 </div>
 </form>
@@ -233,34 +272,42 @@
 </modal-header>
 <modal-content>
   <div class="card-body">
-    <div class=table-responsive>
-    <table class="table table-bordered table-striped table-sm">
+    
+    <div class="table-responsive ">
+      <input  class="form-control mb-2 searchfield" placeholder="Search" type="text" [(ngModel)]="his">
+    <table class="table table-bordered table-striped table-sm ">
       <thead>
 
         <tr>
-          <th>#Sr</th>
+          <th>Sr#</th>
           <th>Buy If</th>
           <th>Sell If</th>
           <th>Take Profit</th>
           <th>Cut Loss</th>
-          <th>Comments</th>
+          <th>Instructions</th>
+          <th>Attachment</th>
+          <th>Date time Created</th>
 
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor='let a of AdviceHistory;let i=index'>
+        <tr *ngFor='let a of AdviceHistory | filter:his| paginate: { itemsPerPage: 5, currentPage: x }; ;let i=index'>
          <td>{{i+1}}</td>
          <td>{{a.by_if}}</td>
          <td>{{a.sell_if}}</td>
          <td>{{a.take_profit_if}}</td>
          <td>{{a.cut_loss_if}}</td>
          <td>{{a.adv_comments}}</td>
+         <td><img style="height: 100px;
+          width: 120px;" src={{Images_base_Url+a.adv_attachment}}></td>
+          <td>{{a.date_time_created}}</td>
         </tr>
 
        
 
       </tbody>
     </table>
+    <pagination-controls (pageChange)="x = $event"></pagination-controls>
   </div>
 
 
@@ -268,7 +315,7 @@
 
 </modal-content>
 <modal-footer>
-  <button class='btn btn-danger btn-sm' (click)='closeModal()'>Cancel</button>
+  <button class='btn btn-danger btn-sm' (click)='closeModal()'>Close</button>
 </modal-footer>
 </modal>
 <notifier-container></notifier-container>

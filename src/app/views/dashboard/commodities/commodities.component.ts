@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalManager } from 'ngb-modal';
 import { Form, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { AppserviceService } from '../../../appservice.service';
 
@@ -20,7 +20,12 @@ export class CommoditiesComponent implements OnInit {
   public notifier;
   public commodities_Form:FormGroup;
   public submitted = false;
-
+  public errorColor=false
+  public AdviceImgError=false;
+  public term;
+  public p;
+  public his;
+  public x;
   public Images_base_Url='http://macho-cart.com/maven-server/';
   public Advoice_form:FormGroup;
   @ViewChild('myModal',{static:false}) myModal;
@@ -28,7 +33,8 @@ export class CommoditiesComponent implements OnInit {
   constructor(public modalService:ModalManager, public fb:FormBuilder, 
     public service:AppserviceService,
     public notifierService: NotifierService,
-    public router:Router
+    public router:Router,
+    private route: ActivatedRoute
     ){
     this.notifier = notifierService;
     
@@ -45,6 +51,8 @@ export class CommoditiesComponent implements OnInit {
        advoice_comm:['',Validators.required]
      })
      this.getAllCommodities();
+
+   
   }
   onResize() {
     
@@ -68,24 +76,85 @@ public getAllCommodities=()=>{
   })
 }
 public ImageFile_of_commodity;
+public Valid_file=false;
   fileCaptuer(event){
+    let oninnerSection=false;
     this.SelectedFileName=event.target.files[0].name;
     this.ImageFile_of_commodity=event.target.files[0];
+    let _validFileExtensions = ["image/png", "image/jpeg", "image/bmp", "image/gif"]; 
+    for(let i=0;i<=3;i++){
+      if(_validFileExtensions[i]==event.target.files[0].type){
+        
+       
+        this.ImageFile_of_commodity=event.target.files[0];
+        let kb=event.target.files[0].size/1000
+        let mb=kb/1000;
+       if(mb>3){
+         this.Valid_file=false;
+         this.errorColor=true;
+         this.SelectedFileName='File Must Be less then 3 MBs'
+       }
+       else{
+         this.Valid_file=true;
+         this.errorColor=false;
+         oninnerSection=true;
+         this.SelectedFileName=event.target.files[0].name;
+       }
+      }
+      else if(oninnerSection==false){
+        console.log('Not Valid file');
+        this.Valid_file=false;
+        this.errorColor=true;
+        this.SelectedFileName='Please Enter Valid File Type e.g PNG OR JPEG'
+      }
+    }
     console.log(event.target.files[0].name);
   }
   toggleCard=()=>{
     this.isAuth=!this.isAuth;
     this.submitted=false;
+    this.errorColor=false;
+    this.SelectedFileName=null;
     this.commodities_Form.reset();
   }
   expandContent = true;
   public PickedFile:any;
   public Advice_image:any=null;
   public Advice_image_name=null;
+  public Adivce_Validator=false;
   fileCaptuer_2(event){
     this.Advice_image_name=event.target.files[0].name;
     this.Advice_image=event.target.files[0]
     console.log(event.target.files[0].name);
+    let oninnerSection=false;
+    let _validFileExtensions = ["image/png", "image/jpeg", "image/bmp", "image/gif"]; 
+    for(let i=0;i<=3;i++){
+      if(_validFileExtensions[i]==event.target.files[0].type){
+        
+       
+        this.ImageFile_of_commodity=event.target.files[0];
+        let kb=event.target.files[0].size/1000
+        let mb=kb/1000;
+       if(mb>3){
+         this.Adivce_Validator=false;
+         this.AdviceImgError=true;
+         this.Advice_image_name='File Must Be less then 3 MBs'
+       }
+       else{
+         this.Adivce_Validator=true;
+         this.AdviceImgError=false;
+         oninnerSection=true;
+         this.Advice_image_name=event.target.files[0].name;
+       }
+      }
+      else if(oninnerSection==false){
+        console.log('Not Valid file');
+        this.Valid_file=false;
+        this.AdviceImgError=true;
+        this.Adivce_Validator=false;
+        this.Advice_image_name='Please attach valid file type e.g PNG OR JPEG'
+      }
+    }
   }
 
 
@@ -158,10 +227,19 @@ add_commodity(){
 
   // stop here if form is invalid
   if (this.commodities_Form.invalid) {
+    if(this.SelectedFileName==null){
+      this.errorColor=true;
+      this.SelectedFileName='File is Required'
+       return;
+     }
       return;
   }
-  if(this.SelectedFileName==null){
-    this.notifier.notify("error","Please Select Image File");
+ else if(this.SelectedFileName==null||  this.SelectedFileName =='File is Required' ){
+   this.SelectedFileName='File is  Required';
+   this.errorColor=true;
+    return;
+  }
+  else if(this.Valid_file==false){
     return;
   }
   else{
@@ -176,6 +254,7 @@ add_commodity(){
        console.log(res);
        if(res.status==true){
          this.toggleCard();
+         this.getAllCommodities();
        }
      })
     console.log(x);
@@ -185,13 +264,21 @@ add_commodity(){
 add_advice(){
   this.submitted=true;
   if(this.Advoice_form.invalid){
+    if(this.Advice_image_name==null){
+      this.Advice_image_name="file is required";
+      this.AdviceImgError=true;
+    }
     return ;
   }
-  if(this.Advice_image_name==null){
-    this.notifier.notify('error','Please Add image File');
+  if(this.Advice_image_name==null || this.Advice_image_name=='file is required'){
+    this.Advice_image_name="file is required";
+    this.AdviceImgError=true;
     return ;
   }
-  else{
+  else if(this.Adivce_Validator==false){
+    return;
+  }
+  else if(this.Adivce_Validator==true){
     let x={
       user_id:localStorage.getItem('user_id'),
       auth_token:localStorage.getItem('auth_token'),
@@ -220,6 +307,36 @@ public RestFormAdvice=()=>{
   this.modalRef=this.modalService.close(this.myModal)
   this.Advice_image_name=null;
   this.Advice_image=null;
+  this.AdviceImgError=false;
+}
+
+public Changing_status_of_commodity=(obj,obj2)=>{
+  if(obj=='Disabled'){
+    let x={
+      user_id:localStorage.getItem('user_id'),
+      auth_token:localStorage.getItem('auth_token'),
+      comm_id:obj2.comm_id,
+      status:'Enabled'
+    }
+    console.log(x);
+    this.service.Commodity_status(x).subscribe((res:any)=>{
+      console.log(res);
+      this.getAllCommodities();
+    })
+  }
+  else if(obj=='Enabled'){
+    let x={
+      user_id:localStorage.getItem('user_id'),
+      auth_token:localStorage.getItem('auth_token'),
+      comm_id:obj2.comm_id,
+      status:'Disabled'
+    }
+    console.log(x);
+    this.service.Commodity_status(x).subscribe((res:any)=>{
+      console.log(res);
+      this.getAllCommodities();
+    })
+  }
 }
 
  getFormData(object) {

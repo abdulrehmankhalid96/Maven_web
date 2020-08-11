@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppserviceService } from '../../../appservice.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NotifierService } from 'angular-notifier';
 
-
 @Component({
-  selector: 'app-chat',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  selector: 'app-publish-notifaction',
+  templateUrl: './publish-notifaction.component.html',
+  styleUrls: ['./publish-notifaction.component.css']
 })
-export class ChatComponent implements OnInit {
+export class PublishNotifactionComponent implements OnInit {
+
 
   constructor(public route:ActivatedRoute,public service:AppserviceService,
     public fb:FormBuilder,public notifierService: NotifierService,) { 
@@ -35,13 +35,13 @@ export class ChatComponent implements OnInit {
     let x;
     this.route.paramMap.subscribe(params => {
      x = params.get("id")
-     this.App_user_id=x
+     this.App_user_id=2
     });
     console.log(x);
     let a={
       user_id:localStorage.getItem('user_id'),
       auth_token:localStorage.getItem('auth_token'),
-      app_user_id:x
+      app_user_id:2
     }
     this.service.GetConversationByUser(a).subscribe((res:any)=>{
       console.log(res);
@@ -148,4 +148,5 @@ goToLink(data){
   console.log(data);
   window.open(this.Images_base_Url+data, "_blank");
 }
+
 }

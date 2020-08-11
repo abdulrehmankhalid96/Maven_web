@@ -13,6 +13,9 @@ import { ChatComponent } from './chat/chat.component';
 import { NotificationComponent } from './notification/notification.component';
 import { UsersComponent } from './users/users.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import {NgxPaginationModule} from 'ngx-pagination';
 const customNotifierOptions: NotifierOptions = {
   position: {
 		horizontal: {
@@ -54,20 +57,28 @@ const customNotifierOptions: NotifierOptions = {
   }
 };
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PersonalAdviceComponent } from './personal-advice/personal-advice.component';
+import { PublishNotifactionComponent } from './publish-notifaction/publish-notifaction.component';
+
 @NgModule({
   imports: [
     FormsModule,
     DashboardRoutingModule,
     ChartsModule,
-    BsDropdownModule,
+    BsDropdownModule.forRoot(),
     ButtonsModule.forRoot(),
     CommonModule,
     ModalModule,
     FormsModule,
     ReactiveFormsModule,
     NotifierModule.withConfig(customNotifierOptions),
+    Ng2SearchPipeModule,
+    NgxPaginationModule,
+   
+   
 
   ],
-  declarations: [ DashboardComponent, CommoditiesComponent, ChatComponent, NotificationComponent, UsersComponent ]
+  declarations: [ DashboardComponent, CommoditiesComponent, ChatComponent, NotificationComponent, UsersComponent, PersonalAdviceComponent, PublishNotifactionComponent ]
 })
 export class DashboardModule { }

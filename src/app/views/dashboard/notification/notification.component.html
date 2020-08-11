@@ -1,9 +1,16 @@
+
+ <div style="    width: 100%;height: 14vh;    padding-top: 10px;">
+
+  <!-- <button type="button" class="btn btn-primary" style="float: left;">Add Notification</button> -->
+  <button type="button" class="btn btn-primary" style="float: right;" (click)='toggleCard()'><i class="fa fa-plus"></i></button>
+
+</div>
 <div class="container-fluid">
-  <div class='row'>
+  <!-- <div class='row'>
     <div class="col-md-3 ">
       <button type="button" class="btn btn-primary" (click)='toggleCard()'> Add Notification</button>
     </div>
-  </div>
+  </div> -->
 
   <div class='row mt-2' *ngIf='isAuth' >
     <div class="col-sm-8 col-md-6">
@@ -12,13 +19,18 @@
         Add Notification
         </div>
         <div class="card-body">
+          <form  [formGroup]='notificationForm'>
           <div class='row'>
             <div class='col-md-11 col-sm-6'>
               <label>
                 Title:
 
               </label>
-              <input placeholder="Title" class='form-control' />
+              <input  formControlName='title' class='form-control' 
+              [ngClass]="{ 'is-invalid': submitted && f.title.errors }"/>
+              <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+                <div *ngIf="f.title.errors.required">Title is required</div>
+            </div>
             </div>
 
           </div>
@@ -28,16 +40,33 @@
                 Body:
 
               </label>
-              <textarea style='height: 120px' placeholder='Body' class='form-control'></textarea>
-
+              <textarea style='height: 120px' formControlName='body' 
+              [ngClass]="{ 'is-invalid': submitted && f.body.errors }"
+               class='form-control'></textarea>
+              <div *ngIf="submitted && f.body.errors" class="invalid-feedback">
+                <div *ngIf="f.body.errors.required">Body is required</div>
             </div>
-          </div>
+            </div>
+            <div class='col-md-11 col-sm-12'>
+              
+              Attachment:
+                <i class="fa fa-file-image-o fa-2x " style='padding: 3px 3px 3px 15px' aria-hidden="true"
+                 (click)='nofiyfile.click()'></i>
+          
+                <input type='file' (change)='imgecapture($event)' hidden #nofiyfile>
+               <span [class.fileError]='WrongFileTypeErrorColor'>{{SelectedFileName}}</span>
+            
+            
+  
+             </div>
 
+          </div>
+        </form>
         </div>
         <div class="card-footer">
           <div class='row'  style='float:right'>
           <div style='padding: 0px 10px'>
-            <button  type="button" class="btn btn-sm btn-success">Submit</button>
+            <button  type="button" class="btn btn-sm btn-success" (click)='submitnotifytion()'>Submit</button>
           </div>
 
 
@@ -55,7 +84,8 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header">
-        <i class="fa fa-align-justify"></i> Notifications Table
+        <i class="fa fa-align-justify"></i> Notifications 
+        <input  class="form-control searchfield" placeholder="Search" type="text" [(ngModel)]="notiy">
       </div>
       <div class="card-body">
         <div class=table-responsive>
@@ -63,25 +93,28 @@
           <thead>
 
             <tr>
-              <th>Sr#</th>
-              <th>Title</th>
-              <th>Body</th>
-              <th>Action</th>
+              <th class="Th_1">Sr#</th>
+              <th class="Th_2">Title</th>
+              <th class="Th_4">Body</th>
+              <th class="Th_3">Attachment</th>
+        
 
             </tr>
           </thead>
           <tbody>
 
-<tr>
-<td>1</td>
-<td>Title of Notification</td>
-<td>Body of Notification</td>
-<td><span class="badge badge-success" >Action</span></td>
+<tr *ngFor='let data of AllNotfiactionData | filter:notiy | paginate: { itemsPerPage: 5, currentPage: p } ;let i=index '>
+<td>{{i+1}}</td>
+<td>{{data.title}}</td>
+<td>{{data.body}}</td>
+<td><img src={{Images_base_Url+data.media_url}} style="height: 140px;width: 120px;"></td>
+
 
 </tr>
 
           </tbody>
         </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
       </div>
 
 
